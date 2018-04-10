@@ -17,7 +17,7 @@ function initScene(){
 }
 
 function createGameScene(){
-  var amlight = new THREE.AmbientLight( 0xffffff,0.25);
+  var amlight = new THREE.AmbientLight( 0xffffff,1);
   scene.add(amlight);
   var light = createPointLight();
   light.position.set(10,10,50);
@@ -28,30 +28,28 @@ function createGameScene(){
   camera.lookAt(0,0,0);
 
   var floor = createGround('wood.jpg');
-  floor.position.set(-10,-10,0);
+  floor.position.set(10,10,0);
   scene.add(floor);
 
-  var poolTable = createTable();
-  scene.add(poolTable);
+  table = createTable();
 }
 
 function createTable(){
   console.log("Creating table!");
   var loader = new THREE.OBJLoader();
   loader.load("../models/PoolTable.obj",
-        function ( geometry, materials ) {
-          var material =
-          new THREE.MeshLambertMaterial( { color: 0x00ff00 } );
-          var pmaterial = new Physijs.createMaterial(material, 0.9, 0.5);
-          table = new Physijs.BoxMesh( geometry, pmaterial );
-          var s = 3;
+        function ( object ) {
+          //var material = new THREE.MeshLambertMaterial( {color: 0xffff00} );
+          //var pmaterial = new Physijs.createMaterial(material, 0,9, 0.5);
+          //table = new Physijs.BoxMesh( object, pmaterial);
+          table = object;
+          var s = 50;
           table.scale.y=s;
           table.scale.x=s;
           table.scale.z=s;
           table.castShadow = true;
-          table.setDamping(0.1,0.1);
 
-          table.position.set(0,0,0);
+          table.position.set(0,0,10);
           scene.add(table);
           return table;
         },
