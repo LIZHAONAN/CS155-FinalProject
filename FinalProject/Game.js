@@ -1,9 +1,12 @@
 var scene, renderer;
-var camera, skyCam;
+var camera, skyCam, avatarCam;
 var table;
+var avatar;
 
-var controls = {camera:camera}
-var state =
+var controls =
+  {fwd:false, bwd:false, left:false, right:false,
+   speed:10}
+var gameState =
      {scene:'main', camera:'none' }
 
 init();
@@ -12,13 +15,9 @@ animate();
 
 function init(){
   initPhysijs();
-  initScene();
+  scene = initScene();
   initRenderer();
   createGameScene();
-}
-
-function initScene(){
-  scene = new Physijs.Scene();
 }
 
 function createGameScene(){
@@ -32,23 +31,32 @@ function createGameScene(){
   camera.position.set(0,50,100);
   camera.lookAt(0,0,0);
 
+  avatarCam = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
+  avatar = createAvatar();
+  avatar.translateY(20);
+  avatarCam.translateY(-4);
+  avatarCam.translateZ(3);
+  scene.add(avatar);
+  gameState.camera = avatarCam;
+
   skyCam = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
   skyCam.position.set(0,150,0);
-  skyCam.lookAt(0,0,0);
+  gameState.camera = skyCam;
+
+  addBalls();
 
   var floor = createGround('wood.jpg');
-  floor.position.set(-10,10,0);
+  //floor.position.set(-10,10,0);
   scene.add(floor);
 
   //table = createTable();
 
-  addBalls();
+  //addBalls();
 }
 
 /*
 function createTable(){
   console.log("Creating table!");
-
   var loader = new THREE.OBJLoader();
   loader.load("../models/PoolTable.obj",
         function ( object ) {
@@ -62,7 +70,6 @@ function createTable(){
           table.scale.x=s;
           table.scale.z=s;
           table.castShadow = true;
-
           table.position.set(0,0,0);
           scene.add(table);
           return table;
@@ -80,25 +87,19 @@ function createTable(){
 		}
 	};
 	var onError = function ( xhr ) { };
-
   var mtlLoader = new THREE.MTLLoader();
   mtlLoader.setTexturePath( '/models/PoolTable/' );
   mtlLoader.setPath( '/models/' );
   var url = "PoolTable.mtl";
   mtlLoader.load( url, function( materials ) {
-
     materials.preload();
-
     var objLoader = new THREE.OBJLoader();
     objLoader.setMaterials( materials );
     objLoader.setPath( '/models/' );
     objLoader.load( 'PoolTable.obj', function ( object ) {
-
         object.position.y = - 95;
         scene.add( object );
-
     }, onProgress, onError );
-
 });*/
 
 
@@ -122,32 +123,66 @@ function createBall(color){
   var geometry = new THREE.SphereGeometry( 3, 20, 20);
   var material = new THREE.MeshLambertMaterial( { color: color} );
   var pmaterial = new Physijs.createMaterial(material,0.9,0.95);
-  var mesh = new Physijs.SphereMesh( geometry, pmaterial );
+  mass=10;
+  var mesh = new Physijs.SphereMesh( geometry, pmaterial, mass);
   mesh.setDamping(0.1,0.1);
   mesh.castShadow = true;
   return mesh;
 }
 
 function addBalls(){
-  var redBall=createBall(0xff0000);
-  redBall.position.set(0,50,10);
+  var numBalls = 2;
 
-  var whiteBall=createBall(0x00ffff);
-  whiteBall.position.set(0,60,0);
+  for(i=0;i<numBalls;i++){
+    var ball = createBall(0xffffff);
+    ball.position.set(15,30+i*5,15);
 
-  scene.add(redBall);
-  scene.add(whiteBall);
+    //ball.position.set(randN(20)+15,30,randN(20)+15);
+    scene.add(ball);
+
+    ball.addEventListener( 'collision',
+      function( other_object, relative_velocity, relative_rotation, contact_normal ) {
+      }
+    )
+  }
+}
+
+function createAvatar(){
+  var geometry = new THREE.SphereGeometry( 3, 20, 20);
+  var material = new THREE.MeshLambertMaterial( { color: 0xff0000} );
+  var pmaterial = new Physijs.createMaterial(material,0.9,0.95);
+  var mesh = new Physijs.BoxMesh( geometry, pmaterial);
+  mesh.setDamping(0.1,0.1);
+  mesh.castShadow = true;
+
+
+
+  avatarCam.position.set(0,4,0);
+  avatarCam.lookAt(0,4,10);
+  mesh.add(avatarCam);
+
+  //var whiteBall=createBall(0x00ffff);
+  //whiteBall.position.set(0,60,0);
+
   console.log("bal hit the cone");
+  return mesh;
 
-
-  redBall.addEventListener( 'collision',
+/*
+  avatar.addEventListener( 'collision',
     function( other_object, relative_velocity, relative_rotation, contact_normal ) {
-        if(other_object = whiteBall){
+        if(other_object = ball1){
           console.log("bal hit the cone");
         }
         this.__dirtyPosition = true;
     }
   )
+  */
+
+}
+
+function initScene(){
+  scene = new Physijs.Scene();
+  return scene;
 }
 
 function initPhysijs(){
@@ -187,38 +222,85 @@ function initControls(){
 }
 
 function keydown(event){
+  console.log("Keydown: '"+event.key+"'");
   console.dir(event);
 
   switch (event.key){
-    case "1": state.camera=camera; break;
-    case "2": state.camera=skyCam;
+    case "w": controls.fwd = true;  break;
+		case "s": controls.bwd = true; break;
+		case "a": controls.left = true; break;
+		case "d": controls.right = true; break;
+    case "m": controls.speed = 30; break;
+			console.dir(avatar);
+    //case "h": controls.reset = true; break;
+
+    case "1": gameState.camera=camera; break;
+    case "2": gameState.camera=skyCam; break;
+    case "3": gameState.camera=avatarCam; break;
+
       console.log("camera changed");
-    break;
   }
 
 }
 
 function keyup(event){
   switch (event.key){
+    case "w": controls.fwd   = false;  break;
+    case "s": controls.bwd   = false; break;
+    case "a": controls.left  = false; break;
+    case "d": controls.right = false; break;
+    case "m": controls.speed = 10; break;
+    //case "h": controls.reset = false; break;
 
   }
 }
 
+function updateAvatar(){
+  "change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
+
+  var forward = avatar.getWorldDirection();
+
+  if (controls.fwd){
+    avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
+  } else if (controls.bwd){
+    avatar.setLinearVelocity(forward.multiplyScalar(-controls.speed));
+  } else {
+    var velocity = avatar.getLinearVelocity();
+    velocity.x=velocity.z=0;
+    avatar.setLinearVelocity(velocity); //stop the xz motion
+  }
+
+  if (controls.left){
+    avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
+  } else if (controls.right){
+    avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
+  }
+/*
+  if (controls.reset){
+    avatar.__dirtyPosition = true;
+    avatar.position.set(40,10,40);
+  }
+  */
+
+}
+
 function animate(){
   requestAnimationFrame( animate );
-  scene.simulate();
 
-
-  switch(state.scene) {
+  switch(gameState.scene) {
 
     case "main":
-      if (state.camera!= 'none'){
-        renderer.render( scene, state.camera );
+      updateAvatar();
+      skyCam.lookAt(avatar.position);
+      scene.simulate();
+
+      if (gameState.camera!= 'none'){
+        renderer.render( scene, gameState.camera );
       }
-      break;
+    break;
 
     default:
-      console.log("don't know the scene "+state.scene);
+      console.log("don't know the scene "+gameState.scene);
 
   }
 }
