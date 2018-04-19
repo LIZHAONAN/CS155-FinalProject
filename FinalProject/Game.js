@@ -18,6 +18,7 @@ function init(){
   scene = initScene();
   initRenderer();
   createGameScene();
+  createTable();
 }
 
 function createGameScene(){
@@ -44,25 +45,49 @@ function createGameScene(){
   gameState.camera = skyCam;
 
   addBalls();
-
+/*
   var floor = createGround('wood.jpg');
   //floor.position.set(-10,10,0);
   scene.add(floor);
-
+*/
   //table = createTable();
 
   //addBalls();
 }
 
-/*
 function createTable(){
   console.log("Creating table!");
   var loader = new THREE.OBJLoader();
-  loader.load("../models/PoolTable.obj",
+  var texture = new THREE.TextureLoader().load( '../images/felt.png');
+  var tableFloor = new Physijs.BoxMesh(
+      new THREE.CubeGeometry( 105, 5, 150 ),
+      new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0.5 }), 0
+    );
+    tableFloor.position.set(0,10,10);
+  tableFloor.receiveShadow = true;
+  scene.add( tableFloor );
+  loader.load('../models/pool.obj', function (object) {
+    object.traverse( function ( child ) {
+						if ( child instanceof THREE.Mesh ) {
+							child.material.map = texture;
+						}
+					} );
+          object.position.set(60,0,100);
+          object.scale.x=3;
+          object.scale.y=3;
+          object.scale.z=3;
+          scene.add( object );
+        })
+
+
+
+}
+  /*
+  loader.load("../models/pool.obj",
         function ( object ) {
-          //var material = new THREE.MeshLambertMaterial( {color: 0xffff00} );
-          //var pmaterial = new Physijs.createMaterial(material, 0,9, 0.5);
-          //table = new Physijs.BoxMesh( object, pmaterial);
+          var material = new THREE.MeshLambertMaterial( {color: 0xffff00} );
+          var pmaterial = new Physijs.createMaterial(material, 0,9, 0.5);
+          table = new Physijs.BoxMesh( object, pmaterial);
           table = object;
           console.dir(table);
           var s = 50;
@@ -79,7 +104,7 @@ function createTable(){
         function(err){console.log("error in loading: "+err);}
       )
   }
-*/
+
 /*	var onProgress = function ( xhr ) {
 		if ( xhr.lengthComputable ) {
 			var percentComplete = xhr.loaded / xhr.total * 100;
@@ -103,7 +128,7 @@ function createTable(){
 });*/
 
 
-function createGround(image){
+/*function createGround(image){
   var geometry = new THREE.PlaneGeometry( 180, 180, 128 );
   var texture = new THREE.TextureLoader().load( '../images/'+image );
   texture.wrapS = THREE.RepeatWrapping;
@@ -118,7 +143,7 @@ function createGround(image){
   mesh.rotateX(Math.PI/2);
   return mesh;
 }
-
+*/
 function createBall(color){
   var geometry = new THREE.SphereGeometry( 3, 20, 20);
   var material = new THREE.MeshLambertMaterial( { color: color} );
@@ -186,8 +211,8 @@ function initScene(){
 }
 
 function initPhysijs(){
-  Physijs.scripts.worker = '/js/physijs_worker.js';
-  Physijs.scripts.ammo = '/js/ammo.js';
+  Physijs.scripts.worker = '../js/physijs_worker.js';
+  Physijs.scripts.ammo = '../js/ammo.js';
   console.dir(Physijs.scripts);
 }
 
