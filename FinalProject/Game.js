@@ -3,6 +3,8 @@ var camera, skyCam, avatarCam;
 var table;
 var avatar;
 
+var whiteBall_control = {speed:0};
+
 var controls =
   {fwd:false, bwd:false, left:false, right:false,
    speed:10}
@@ -57,13 +59,15 @@ function createGameScene(){
 
 function createTable(){
   console.log("Creating table!");
+
+
   var loader = new THREE.OBJLoader();
   var texture = new THREE.TextureLoader().load( '../images/felt.png');
   var tableFloor = new Physijs.BoxMesh(
       new THREE.CubeGeometry( 105, 5, 150 ),
       new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0.5 }), 0
     );
-    tableFloor.position.set(0,10,10);
+  tableFloor.position.set(0,10,10);
   tableFloor.receiveShadow = true;
   scene.add( tableFloor );
   loader.load('../models/pool.obj', function (object) {
@@ -72,10 +76,11 @@ function createTable(){
 							child.material.map = texture;
 						}
 					} );
+          scale = 3;
           object.position.set(60,0,100);
-          object.scale.x=3;
-          object.scale.y=3;
-          object.scale.z=3;
+          object.scale.x=scale;
+          object.scale.y=scale;
+          object.scale.z=scale;
           scene.add( object );
         })
 
@@ -249,14 +254,15 @@ function initControls(){
 function keydown(event){
   console.log("Keydown: '"+event.key+"'");
   console.dir(event);
-
+  console.log(whiteBall_control.speed);
   switch (event.key){
     case "w": controls.fwd = true;  break;
 		case "s": controls.bwd = true; break;
 		case "a": controls.left = true; break;
 		case "d": controls.right = true; break;
     case "m": controls.speed = 30; break;
-			console.dir(avatar);
+    case "o": whiteBall_control.speed = (whiteBall_control.speed + 1) % 30; break;
+		console.dir(avatar);
     //case "h": controls.reset = true; break;
 
     case "1": gameState.camera=camera; break;
@@ -276,7 +282,7 @@ function keyup(event){
     case "d": controls.right = false; break;
     case "m": controls.speed = 10; break;
     //case "h": controls.reset = false; break;
-
+    //case "o": whiteBall_control.speed = 0; break;
   }
 }
 
@@ -326,6 +332,9 @@ function animate(){
 
     default:
       console.log("don't know the scene "+gameState.scene);
+    }
 
-  }
+    var info = document.getElementById("info");
+		info.innerHTML='<div><progress value=' + whiteBall_control.speed + ' max=30>' +
+				'</progress></div>';
 }
