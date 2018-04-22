@@ -112,7 +112,7 @@ function createTable(){
 
 
   var loader = new THREE.OBJLoader();
-  var texture = new THREE.TextureLoader().load( '../images/blue.jpg');
+  var texture = new THREE.TextureLoader().load( '../images/blue.jpeg');
 
   var scale = 2.3;
   var tableFloor = new Physijs.BoxMesh(
@@ -234,7 +234,7 @@ function addBalls(){
 
 function createAvatar(){
   var geometry = new THREE.SphereGeometry( 3, 20, 20);
-  var material = new THREE.MeshLambertMaterial( { color: 0xff0000} );
+  var material = new THREE.MeshLambertMaterial( { color: 0xffffff} );
   var pmaterial = new Physijs.createMaterial(material,0.9,0.95);
   var mesh = new Physijs.BoxMesh( geometry, pmaterial);
   mesh.setDamping(0.1,0.1);
