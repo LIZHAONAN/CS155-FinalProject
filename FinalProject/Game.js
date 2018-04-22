@@ -112,22 +112,25 @@ function createTable(){
 
 
   var loader = new THREE.OBJLoader();
-  var texture = new THREE.TextureLoader().load( '../images/blue.jpeg');
+  var texture = new THREE.TextureLoader().load( '../images/blue.jpg');
+
+  var scale = 2.3;
   var tableFloor = new Physijs.BoxMesh(
-      new THREE.CubeGeometry( 105, 5, 150 ),
+      new THREE.CubeGeometry( scale * 54, 5, scale * 102 ),
       new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0.5 }), 0
     );
   tableFloor.position.set(0,10,10);
   tableFloor.receiveShadow = true;
   scene.add( tableFloor );
-  loader.load('../models/pool.obj', function (object) {
+
+  loader.load('../models/PoolTable.obj', function (object) {
     object.traverse( function ( child ) {
 						if ( child instanceof THREE.Mesh ) {
 							child.material.map = texture;
 						}
 					} );
-          scale = 3;
-          object.position.set(60,0,100);
+          var scale = 100;
+          object.position.set(22,-76.3,28);
           object.scale.x=scale;
           object.scale.y=scale;
           object.scale.z=scale;
