@@ -43,18 +43,68 @@ function createGameScene(){
   gameState.camera = avatarCam;
 
   skyCam = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
-  skyCam.position.set(0,150,0);
+  skyCam.position.set(0,150,50);
   gameState.camera = skyCam;
 
-  addBalls();
-/*
-  var floor = createGround('wood.jpg');
-  //floor.position.set(-10,10,0);
-  scene.add(floor);
-*/
-  //table = createTable();
+	var yellowBall=createBall(0xffff00);
+  yellowBall.position.set(0,15,-20);
+  scene.add(yellowBall);  console.dir(yellowBall)
 
-  //addBalls();
+  var redBall=createBall(0xff0000);
+  redBall.position.set(3,15,-26);
+  scene.add(redBall);
+
+  var purpleBall=createBall(0x4B0082);
+  purpleBall.position.set(-3,15,-26);
+  scene.add(purpleBall);
+
+  var redBall2=createBall(0xff0000);
+  redBall2.position.set(6,15,-32);
+  scene.add(redBall2);
+
+  var blackBall=createBall(0x000000);
+  blackBall.position.set(0,15,-32)
+  scene.add(blackBall);
+
+  var yellowBall2=createBall(0xffff00);
+  yellowBall2.position.set(-6,15,-32);
+  scene.add(yellowBall2);
+
+  var greenBall=createBall(0x228B22);
+  greenBall.position.set(9,15,-38);
+  scene.add(greenBall);
+
+  var blueBall=createBall(0x0000ff);
+  blueBall.position.set(3,15,-38);
+  scene.add(blueBall);
+
+  var darkorangeBall=createBall(0xFF4500);
+  darkorangeBall.position.set(-3,15,-38);
+  scene.add(darkorangeBall);
+
+  var greenBall2=createBall(0x228B22);
+  greenBall2.position.set(-9,15,-38);
+  scene.add(greenBall2);
+
+  var darkorangeBall2=createBall(0xFF4500);
+  darkorangeBall2.position.set(12,15,-44);
+  scene.add(darkorangeBall2);
+
+  var blueBall2=createBall(0x0000ff);
+  blueBall2.position.set(6,15,-44);
+  scene.add(blueBall2);
+
+  var orangeBall=createBall(0xFF8C00);
+  orangeBall.position.set(0,15,-44);
+  scene.add(orangeBall);
+
+  var purpleBall2=createBall(0x4B0082);
+  purpleBall2.position.set(-6,15,-44);
+  scene.add(purpleBall2);
+
+  var orangeBall2=createBall(0xFF8C00);
+  orangeBall2.position.set(-12,15,-44);
+  scene.add(orangeBall2);
 }
 
 function createTable(){
@@ -62,7 +112,7 @@ function createTable(){
 
 
   var loader = new THREE.OBJLoader();
-  var texture = new THREE.TextureLoader().load( '../images/felt.png');
+  var texture = new THREE.TextureLoader().load( '../images/blue.jpeg');
   var tableFloor = new Physijs.BoxMesh(
       new THREE.CubeGeometry( 105, 5, 150 ),
       new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0.5 }), 0
@@ -160,6 +210,7 @@ function createBall(color){
   return mesh;
 }
 
+/*
 function addBalls(){
   var numBalls = 2;
 
@@ -176,6 +227,7 @@ function addBalls(){
     )
   }
 }
+*/
 
 function createAvatar(){
   var geometry = new THREE.SphereGeometry( 3, 20, 20);
@@ -190,9 +242,6 @@ function createAvatar(){
   avatarCam.position.set(0,4,0);
   avatarCam.lookAt(0,4,10);
   mesh.add(avatarCam);
-
-  //var whiteBall=createBall(0x00ffff);
-  //whiteBall.position.set(0,60,0);
 
   console.log("bal hit the cone");
   return mesh;
