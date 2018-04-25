@@ -2,27 +2,48 @@ var scene, renderer;
 var camera, skyCam, avatarCam;
 var table;
 var avatar;
-
+var endScene, endCamera, endText;
 var whiteBall_control = {speed:0};
 
 var controls =
   {fwd:false, bwd:false, left:false, right:false,
    speed:10}
 var gameState =
-     {scene:'main', camera:'none' }
+     {scene:'main', camera:'none',score:0,yb:0,rb:0,pb:0,rb2:0,bb:0,yb2:0,gb:0,blub:0,dob:0,gb2:0,dob2:0,blub2:0,ob:0,pb2:0,ob2:0}
+var yellowBall,redBall,purpleBall,redBall2,blackBall,yellowBall2,greenBall,blueBall,darkorangeBall,greenBall2,darkorangeBall2,blueBall2,orangeBall,purpleBall2,orangeBall2;
 
 init();
 initControls();
 animate();
+function createEndScene(){
+
+
+  endScene = initScene();
+  endText = createSkyBox('youwon.png',10);
+  //endText.rotateX(Math.PI);
+  endScene.add(endText);
+  var light1 = createPointLight();
+  light1.position.set(0,200,20);
+  endScene.add(light1);
+  endCamera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
+  endCamera.position.set(0,50,1);
+  endCamera.lookAt(0,0,0);
+
+}
 
 function init(){
   initPhysijs();
   scene = initScene();
+  createEndScene();
   initRenderer();
+  createMainScene();
+  //createGameScene();
+  //createTable();
+}
+function createMainScene(){
   createGameScene();
   createTable();
 }
-
 function createGameScene(){
   var amlight = new THREE.AmbientLight( 0xffffff,1);
   scene.add(amlight);
@@ -46,63 +67,63 @@ function createGameScene(){
   skyCam.position.set(0,150,50);
   gameState.camera = skyCam;
 
-	var yellowBall=createBall(0xffff00);
+	yellowBall=createBall(0xffff00);
   yellowBall.position.set(0,15,-20);
   scene.add(yellowBall);  console.dir(yellowBall)
 
-  var redBall=createBall(0xff0000);
+  redBall=createBall(0xff0000);
   redBall.position.set(3,15,-26);
   scene.add(redBall);
 
-  var purpleBall=createBall(0x4B0082);
+  purpleBall=createBall(0x4B0082);
   purpleBall.position.set(-3,15,-26);
   scene.add(purpleBall);
 
-  var redBall2=createBall(0xff0000);
+  redBall2=createBall(0xff0000);
   redBall2.position.set(6,15,-32);
   scene.add(redBall2);
 
-  var blackBall=createBall(0x000000);
+  blackBall=createBall(0x000000);
   blackBall.position.set(0,15,-32)
   scene.add(blackBall);
 
-  var yellowBall2=createBall(0xffff00);
+  yellowBall2=createBall(0xffff00);
   yellowBall2.position.set(-6,15,-32);
   scene.add(yellowBall2);
 
-  var greenBall=createBall(0x228B22);
+  greenBall=createBall(0x228B22);
   greenBall.position.set(9,15,-38);
   scene.add(greenBall);
 
-  var blueBall=createBall(0x0000ff);
+  blueBall=createBall(0x0000ff);
   blueBall.position.set(3,15,-38);
   scene.add(blueBall);
 
-  var darkorangeBall=createBall(0xFF4500);
+  darkorangeBall=createBall(0xFF4500);
   darkorangeBall.position.set(-3,15,-38);
   scene.add(darkorangeBall);
 
-  var greenBall2=createBall(0x228B22);
+  greenBall2=createBall(0x228B22);
   greenBall2.position.set(-9,15,-38);
   scene.add(greenBall2);
 
-  var darkorangeBall2=createBall(0xFF4500);
+  darkorangeBall2=createBall(0xFF4500);
   darkorangeBall2.position.set(12,15,-44);
   scene.add(darkorangeBall2);
 
-  var blueBall2=createBall(0x0000ff);
+  blueBall2=createBall(0x0000ff);
   blueBall2.position.set(6,15,-44);
   scene.add(blueBall2);
 
-  var orangeBall=createBall(0xFF8C00);
+  orangeBall=createBall(0xFF8C00);
   orangeBall.position.set(0,15,-44);
   scene.add(orangeBall);
 
-  var purpleBall2=createBall(0x4B0082);
+  purpleBall2=createBall(0x4B0082);
   purpleBall2.position.set(-6,15,-44);
   scene.add(purpleBall2);
 
-  var orangeBall2=createBall(0xFF8C00);
+  orangeBall2=createBall(0xFF8C00);
   orangeBall2.position.set(-12,15,-44);
   scene.add(orangeBall2);
 
@@ -276,24 +297,12 @@ function createAvatar(){
   avatarCam.lookAt(0,4,10);
   mesh.add(avatarCam);
 
-  console.log("bal hit the cone");
   return mesh;
-
-/*
-  avatar.addEventListener( 'collision',
-    function( other_object, relative_velocity, relative_rotation, contact_normal ) {
-        if(other_object = ball1){
-          console.log("bal hit the cone");
-        }
-        this.__dirtyPosition = true;
-    }
-  )
-  */
 
 }
 
 function initScene(){
-  scene = new Physijs.Scene();
+  var scene = new Physijs.Scene();
   return scene;
 }
 
@@ -387,11 +396,138 @@ function keyup(event){
   }
 }
 
+function updateBall(){
+  if(gameState.yb==0){
+      if(yellowBall.position.x>=55||yellowBall.position.x<=-56||yellowBall.position.z>=106||yellowBall.position.z<=-98){
+        gameState.score+=1;
+        yellowBall.position.y = yellowBall.position.y - 100;
+        yellowBall.__dirtyPosition = true;
+        gameState.yb=1;
+      }
+  }
+  if(gameState.rb==0){
+      if(redBall.position.x>=55||redBall.position.x<=-56||redBall.position.z>=106||redBall.position.z<=-98){
+        gameState.score+=1;
+        redBall.position.y = redBall.position.y - 100;
+        redBall.__dirtyPosition = true;
+        gameState.rb=1;
+      }
+  }
+  if(gameState.pb==0){
+      if(purpleBall.position.x>=55||purpleBall.position.x<=-56||purpleBall.position.z>=106||purpleBall.position.z<=-98){
+        gameState.score+=1;
+        purpleBall.position.y = purpleBall.position.y - 100;
+        purpleBall.__dirtyPosition = true;
+        gameState.pb=1;
+      }
+  }
+  if(gameState.rb2==0){
+      if(redBall2.position.x>=55||redBall2.position.x<=-56||redBall2.position.z>=106||redBall2.position.z<=-98){
+        gameState.score+=1;
+        redBall2.position.y = redBall2.position.y - 100;
+        redBall2.__dirtyPosition = true;
+        gameState.rb2=1;
+      }
+  }
+  if(gameState.bb==0){
+      if(blackBall.position.x>=55||blackBall.position.x<=-56||blackBall.position.z>=106||blackBall.position.z<=-98){
+        gameState.score+=1;
+        blackBall.position.y = blackBall.position.y - 100;
+        blackBall.__dirtyPosition = true;
+        gameState.bb=1;
+      }
+  }
+  if(gameState.yb2==0){
+      if(yellowBall2.position.x>=55||yellowBall2.position.x<=-56||yellowBall2.position.z>=106||yellowBall2.position.z<=-98){
+        gameState.score+=1;
+        yellowBall2.position.y = yellowBall2.position.y - 100;
+        yellowBall2.__dirtyPosition = true;
+        gameState.yb2=1;
+      }
+  }
+  if(gameState.gb==0){
+      if(greenBall.position.x>=55||greenBall.position.x<=-56||greenBall.position.z>=106||greenBall.position.z<=-98){
+        gameState.score+=1;
+        greenBall.position.y = greenBall.position.y - 100;
+        greenBall.__dirtyPosition = true;
+        gameState.gb=1;
+      }
+  }
+  if(gameState.blub==0){
+      if(blueBall.position.x>=55||blueBall.position.x<=-56||blueBall.position.z>=106||blueBall.position.z<=-98){
+        gameState.score+=1;
+        blueBall.position.y = blueBall.position.y - 100;
+        blueBall.__dirtyPosition = true;
+        gameState.blub=1;
+      }
+  }
+  if(gameState.dob==0){
+      if(darkorangeBall.position.x>=55||darkorangeBall.position.x<=-56||darkorangeBall.position.z>=106||darkorangeBall.position.z<=-98){
+        gameState.score+=1;
+        darkorangeBall.position.y = darkorangeBall.position.y - 100;
+        darkorangeBall.__dirtyPosition = true;
+        gameState.dob=1;
+      }
+  }
+  if(gameState.gb2==0){
+      if(greenBall2.position.x>=55||greenBall2.position.x<=-56||greenBall2.position.z>=106||greenBall2.position.z<=-98){
+        gameState.score+=1;
+        greenBall2.position.y = greenBall2.position.y - 100;
+        greenBall2.__dirtyPosition = true;
+        gameState.gb2=1;
+      }
+  }
+  if(gameState.dob2==0){
+      if(darkorangeBall2.position.x>=55||darkorangeBall2.position.x<=-56||darkorangeBall2.position.z>=106||darkorangeBall2.position.z<=-98){
+        gameState.score+=1;
+        darkorangeBall2.position.y = darkorangeBall2.position.y - 100;
+        darkorangeBall2.__dirtyPosition = true;
+        gameState.dob2=1;
+      }
+  }
+  if(gameState.blub2==0){
+      if(blueBall2.position.x>=55||blueBall2.position.x<=-56||blueBall2.position.z>=106||blueBall2.position.z<=-98){
+        gameState.score+=1;
+        blueBall2.position.y = blueBall2.position.y - 100;
+        blueBall2.__dirtyPosition = true;
+        gameState.blub2=1;
+      }
+  }
+  if(gameState.ob==0){
+      if(orangeBall.position.x>=55||orangeBall.position.x<=-56||orangeBall.position.z>=106||orangeBall.position.z<=-98){
+        gameState.score+=1;
+        orangeBall.position.y = orangeBall.position.y - 100;
+        orangeBall.__dirtyPosition = true;
+        gameState.ob=1;
+      }
+  }
+  if(gameState.pb2==0){
+      if(purpleBall2.position.x>=55||purpleBall2.position.x<=-56||purpleBall2.position.z>=106||purpleBall2.position.z<=-98){
+        gameState.score+=1;
+        purpleBall2.position.y = purpleBall2.position.y - 100;
+        purpleBall2.__dirtyPosition = true;
+        gameState.pb2=1;
+      }
+  }
+  if(gameState.ob2==0){
+      if(orangeBall2.position.x>=55||orangeBall2.position.x<=-56||orangeBall2.position.z>=106||orangeBall2.position.z<=-98){
+        gameState.score+=1;
+        orangeBall2.position.y = orangeBall2.position.y - 100;
+        orangeBall2.__dirtyPosition = true;
+        gameState.ob2=1;
+      }
+  }
+  if (gameState.score==15) {
+
+          gameState.scene='youwon';
+      }
+}
+
 function updateAvatar(){
   "change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
 
   var forward = avatar.getWorldDirection();
-  /*
+/*
   if (controls.fwd){
     avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
   } else if (controls.bwd){
@@ -401,8 +537,7 @@ function updateAvatar(){
     //velocity.x=velocity.z=0;
     avatar.setLinearVelocity(velocity); //stop the xz motion
   }
-  */
-
+*/
   if (controls.left){
     avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
   } else if (controls.right){
@@ -421,9 +556,15 @@ function animate(){
   requestAnimationFrame( animate );
 
   switch(gameState.scene) {
+    case "youwon":
+
+      endText.rotateY(0.005);
+      renderer.render( endScene, endCamera );
+      break;
 
     case "main":
       updateAvatar();
+      updateBall();
       skyCam.lookAt(0,10,25);
       scene.simulate();
 
@@ -438,5 +579,27 @@ function animate(){
 
     var info = document.getElementById("info");
 		info.innerHTML='<div><progress value=' + whiteBall_control.speed + ' max=30>' +
-				'</progress></div>';
+				'</progress></div>'+'<div style="font-size:24pt">Score: ' + gameState.score + '</div>';
+}
+
+
+function createSkyBox(image,k){
+  // creating a textured plane which receives shadows
+  var geometry = new THREE.SphereGeometry( 80, 80, 80 );
+  var texture = new THREE.TextureLoader().load( '../images/'+image );
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set( k, k );
+  var material = new THREE.MeshLambertMaterial( { color: 0xffffff,  map: texture ,side:THREE.DoubleSide} );
+  //var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
+  //var mesh = new THREE.Mesh( geometry, material );
+  var mesh = new THREE.Mesh( geometry, material);
+
+  mesh.receiveShadow = false;
+
+
+  return mesh
+  // we need to rotate the mesh 90 degrees to make it horizontal not vertical
+
+
 }
