@@ -168,7 +168,7 @@ function createTable(){
   var scale = 2.3;
   var tableFloor = new Physijs.BoxMesh(
       new THREE.CubeGeometry( scale * 54, 5, scale * 102 ),
-      new THREE.MeshBasicMaterial({ wireframe: true, opacity: 0.5 }), 0
+      new THREE.MeshBasicMaterial({ wireframe: false, transparent: true, opacity: 0 }), 0
     );
   tableFloor.position.set(0,10,10);
   tableFloor.receiveShadow = true;
