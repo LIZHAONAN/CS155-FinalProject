@@ -24,7 +24,6 @@ function init(){
 }
 
 function createGameScene(){
-
   var amlight = new THREE.AmbientLight( 0xffffff,1);
   scene.add(amlight);
   var light = createPointLight();
@@ -135,6 +134,7 @@ function createGameScene(){
   bar6.position.set(60,16,56);
   scene.add(bar6);
 
+  avatar.setLinearVelocity(new THREE.Vector3(1,0,0));
 }
 
 function createTable(){
@@ -142,7 +142,7 @@ function createTable(){
 
 
   var loader = new THREE.OBJLoader();
-  var texture = new THREE.TextureLoader().load( '/images/blue.jpeg');
+  var texture = new THREE.TextureLoader().load( '../images/table.jpg');
 
   var scale = 2.3;
   var tableFloor = new Physijs.BoxMesh(
@@ -152,9 +152,8 @@ function createTable(){
   tableFloor.position.set(0,10,10);
   tableFloor.receiveShadow = true;
   scene.add( tableFloor );
-  console.dir(tableFloor)
 
-  loader.load('/models/PoolTable.obj', function (object) {
+  loader.load('../models/PoolTable.obj', function (object) {
     object.traverse( function ( child ) {
 						if ( child instanceof THREE.Mesh ) {
 							child.material.map = texture;
@@ -170,10 +169,7 @@ function createTable(){
 
 
 
-
-
 }
-
   /*
   loader.load("../models/pool.obj",
         function ( object ) {
@@ -196,6 +192,7 @@ function createTable(){
         function(err){console.log("error in loading: "+err);}
       )
   }
+
 /*	var onProgress = function ( xhr ) {
 		if ( xhr.lengthComputable ) {
 			var percentComplete = xhr.loaded / xhr.total * 100;
@@ -228,7 +225,9 @@ function createTable(){
   var material = new THREE.MeshLambertMaterial( { color: 0xffffff,  map: texture ,side:THREE.DoubleSide} );
   var pmaterial = new Physijs.createMaterial(material,0.9,0.05);
   var mesh = new Physijs.BoxMesh( geometry, pmaterial, 0 );
+
   mesh.receiveShadow = true;
+
   mesh.rotateX(Math.PI/2);
   return mesh;
 }
@@ -247,11 +246,14 @@ function createBall(color){
 /*
 function addBalls(){
   var numBalls = 2;
+
   for(i=0;i<numBalls;i++){
     var ball = createBall(0xffffff);
     ball.position.set(15,30+i*5,15);
+
     //ball.position.set(randN(20)+15,30,randN(20)+15);
     scene.add(ball);
+
     ball.addEventListener( 'collision',
       function( other_object, relative_velocity, relative_rotation, contact_normal ) {
       }
@@ -290,13 +292,6 @@ function createAvatar(){
 
 }
 
-function createBoxMesh(w,h,d){
-  var geometry = new THREE.BoxGeometry( w, h, d);
-  var material = new THREE.MeshLambertMaterial( { color: 0x8B4513} );
-  mesh = new Physijs.BoxMesh( geometry, material,0 );
-  return mesh;
-}
-
 function initScene(){
   scene = new Physijs.Scene();
   return scene;
@@ -327,6 +322,13 @@ function createPointLight(){
   return light;
 }
 
+function createBoxMesh(w,h,d){
+  var geometry = new THREE.BoxGeometry( w, h, d);
+  var material = new THREE.MeshLambertMaterial( { color: 0x8B4513} );
+  mesh = new Physijs.BoxMesh( geometry, material,0 );
+  return mesh;
+}
+
 var clock;
 
 function initControls(){
@@ -345,10 +347,12 @@ function keydown(event){
   switch (event.key){
     case "w": controls.fwd = true;  break;
 		case "s": controls.bwd = true; break;
-		case "a": controls.left = true; break;
+		case "a": controls.left = true; console.log(avatarCam.getWorldDirection());break;
 		case "d": controls.right = true; break;
     case "m": controls.speed = 30; break;
-    case "o": whiteBall_control.speed = (whiteBall_control.speed + 1) % 30; break;
+    case "o": //whiteBall_control.speed=20;
+              whiteBall_control.speed = (whiteBall_control.speed + 1) % 30;
+              break;
 		console.dir(avatar);
     //case "h": controls.reset = true; break;
 
@@ -369,7 +373,17 @@ function keyup(event){
     case "d": controls.right = false; break;
     case "m": controls.speed = 10; break;
     //case "h": controls.reset = false; break;
-    //case "o": whiteBall_control.speed = 0; break;
+    case "o":
+      var dir = avatarCam.getWorldDirection();
+      var x = dir.x;
+      var y = dir.y;
+      var z = dir.z;
+      var s = 2 * whiteBall_control.speed;
+      //avatar.__dirtyPosition = true;
+      //avatar.__dirtyRotation = true;
+      console.log(dir);
+      avatar.setLinearVelocity(new THREE.Vector3(x * s, y * s, z * s));
+    break;
   }
 }
 
@@ -377,16 +391,17 @@ function updateAvatar(){
   "change the avatar's linear or angular velocity based on controls state (set by WSAD key presses)"
 
   var forward = avatar.getWorldDirection();
-
+  /*
   if (controls.fwd){
     avatar.setLinearVelocity(forward.multiplyScalar(controls.speed));
   } else if (controls.bwd){
     avatar.setLinearVelocity(forward.multiplyScalar(-controls.speed));
   } else {
     var velocity = avatar.getLinearVelocity();
-    velocity.x=velocity.z=0;
+    //velocity.x=velocity.z=0;
     avatar.setLinearVelocity(velocity); //stop the xz motion
   }
+  */
 
   if (controls.left){
     avatar.setAngularVelocity(new THREE.Vector3(0,controls.speed*0.1,0));
@@ -425,4 +440,3 @@ function animate(){
 		info.innerHTML='<div><progress value=' + whiteBall_control.speed + ' max=30>' +
 				'</progress></div>';
 }
-
