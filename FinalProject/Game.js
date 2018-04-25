@@ -24,6 +24,7 @@ function init(){
 }
 
 function createGameScene(){
+
   var amlight = new THREE.AmbientLight( 0xffffff,1);
   scene.add(amlight);
   var light = createPointLight();
@@ -105,6 +106,35 @@ function createGameScene(){
   var orangeBall2=createBall(0xFF8C00);
   orangeBall2.position.set(-12,15,-44);
   scene.add(orangeBall2);
+
+  var bar1=createBoxMesh(95,4,14);
+  bar1.position.set(0,16,-107);
+  scene.add(bar1);
+
+  var bar2=createBoxMesh(95,4,14);
+  bar2.position.set(0,16,115);
+  scene.add(bar2);
+
+  var bar3=createBoxMesh(90,4,14);
+  bar3.rotateY(Math.PI/2)
+  bar3.position.set(-60,16,-50);
+  scene.add(bar3);
+
+  var bar4=createBoxMesh(90,4,14);
+  bar4.rotateY(Math.PI/2)
+  bar4.position.set(60,16,-50);
+  scene.add(bar4);
+
+  var bar5=createBoxMesh(90,4,14);
+  bar5.rotateY(Math.PI/2)
+  bar5.position.set(-60,16,56);
+  scene.add(bar5);
+
+  var bar6=createBoxMesh(90,4,14);
+  bar6.rotateY(Math.PI/2)
+  bar6.position.set(60,16,56);
+  scene.add(bar6);
+
 }
 
 function createTable(){
@@ -112,7 +142,7 @@ function createTable(){
 
 
   var loader = new THREE.OBJLoader();
-  var texture = new THREE.TextureLoader().load( '../images/blue.jpeg');
+  var texture = new THREE.TextureLoader().load( '/images/blue.jpeg');
 
   var scale = 2.3;
   var tableFloor = new Physijs.BoxMesh(
@@ -122,15 +152,16 @@ function createTable(){
   tableFloor.position.set(0,10,10);
   tableFloor.receiveShadow = true;
   scene.add( tableFloor );
+  console.dir(tableFloor)
 
-  loader.load('../models/PoolTable.obj', function (object) {
+  loader.load('/models/PoolTable.obj', function (object) {
     object.traverse( function ( child ) {
 						if ( child instanceof THREE.Mesh ) {
 							child.material.map = texture;
 						}
 					} );
           var scale = 100;
-          object.position.set(22,-76.3,28);
+          object.position.set(16,-76.3,28);
           object.scale.x=scale;
           object.scale.y=scale;
           object.scale.z=scale;
@@ -139,7 +170,10 @@ function createTable(){
 
 
 
+
+
 }
+
   /*
   loader.load("../models/pool.obj",
         function ( object ) {
@@ -162,7 +196,6 @@ function createTable(){
         function(err){console.log("error in loading: "+err);}
       )
   }
-
 /*	var onProgress = function ( xhr ) {
 		if ( xhr.lengthComputable ) {
 			var percentComplete = xhr.loaded / xhr.total * 100;
@@ -195,9 +228,7 @@ function createTable(){
   var material = new THREE.MeshLambertMaterial( { color: 0xffffff,  map: texture ,side:THREE.DoubleSide} );
   var pmaterial = new Physijs.createMaterial(material,0.9,0.05);
   var mesh = new Physijs.BoxMesh( geometry, pmaterial, 0 );
-
   mesh.receiveShadow = true;
-
   mesh.rotateX(Math.PI/2);
   return mesh;
 }
@@ -216,14 +247,11 @@ function createBall(color){
 /*
 function addBalls(){
   var numBalls = 2;
-
   for(i=0;i<numBalls;i++){
     var ball = createBall(0xffffff);
     ball.position.set(15,30+i*5,15);
-
     //ball.position.set(randN(20)+15,30,randN(20)+15);
     scene.add(ball);
-
     ball.addEventListener( 'collision',
       function( other_object, relative_velocity, relative_rotation, contact_normal ) {
       }
@@ -260,6 +288,13 @@ function createAvatar(){
   )
   */
 
+}
+
+function createBoxMesh(w,h,d){
+  var geometry = new THREE.BoxGeometry( w, h, d);
+  var material = new THREE.MeshLambertMaterial( { color: 0x8B4513} );
+  mesh = new Physijs.BoxMesh( geometry, material,0 );
+  return mesh;
 }
 
 function initScene(){
@@ -374,7 +409,7 @@ function animate(){
 
     case "main":
       updateAvatar();
-      skyCam.lookAt(avatar.position);
+      skyCam.lookAt(0,10,25);
       scene.simulate();
 
       if (gameState.camera!= 'none'){
@@ -390,3 +425,4 @@ function animate(){
 		info.innerHTML='<div><progress value=' + whiteBall_control.speed + ' max=30>' +
 				'</progress></div>';
 }
+
