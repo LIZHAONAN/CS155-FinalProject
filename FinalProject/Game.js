@@ -324,7 +324,8 @@ function updateBall(){
   if(gameState.yb==0){
       if(yellowBall.position.x>=55||yellowBall.position.x<=-56||yellowBall.position.z>=106||yellowBall.position.z<=-98){
         gameState.score+=1;
-        yellowBall.position.y = yellowBall.position.y - 100;
+        //yellowBall.position.y = yellowBall.position.y - 100;
+        scene.remove(yellowBall);
         yellowBall.__dirtyPosition = true;
         gameState.yb=1;
       }
@@ -332,7 +333,8 @@ function updateBall(){
   if(gameState.rb==0){
       if(redBall.position.x>=55||redBall.position.x<=-56||redBall.position.z>=106||redBall.position.z<=-98){
         gameState.score+=1;
-        redBall.position.y = redBall.position.y - 100;
+        //redBall.position.y = redBall.position.y - 100;
+        scene.remove(redBall);
         redBall.__dirtyPosition = true;
         gameState.rb=1;
       }
@@ -340,7 +342,8 @@ function updateBall(){
   if(gameState.pb==0){
       if(purpleBall.position.x>=55||purpleBall.position.x<=-56||purpleBall.position.z>=106||purpleBall.position.z<=-98){
         gameState.score+=1;
-        purpleBall.position.y = purpleBall.position.y - 100;
+        //purpleBall.position.y = purpleBall.position.y - 100;
+        scene.remove(purpleBall);
         purpleBall.__dirtyPosition = true;
         gameState.pb=1;
       }
@@ -348,7 +351,8 @@ function updateBall(){
   if(gameState.rb2==0){
       if(redBall2.position.x>=55||redBall2.position.x<=-56||redBall2.position.z>=106||redBall2.position.z<=-98){
         gameState.score+=1;
-        redBall2.position.y = redBall2.position.y - 100;
+        //redBall2.position.y = redBall2.position.y - 100;
+        scene.remove(redBall2);
         redBall2.__dirtyPosition = true;
         gameState.rb2=1;
       }
@@ -356,7 +360,8 @@ function updateBall(){
   if(gameState.bb==0){
       if(blackBall.position.x>=55||blackBall.position.x<=-56||blackBall.position.z>=106||blackBall.position.z<=-98){
         gameState.score+=1;
-        blackBall.position.y = blackBall.position.y - 100;
+        //blackBall.position.y = blackBall.position.y - 100;
+        scene.remove(blackBall);
         blackBall.__dirtyPosition = true;
         gameState.bb=1;
       }
@@ -364,7 +369,8 @@ function updateBall(){
   if(gameState.yb2==0){
       if(yellowBall2.position.x>=55||yellowBall2.position.x<=-56||yellowBall2.position.z>=106||yellowBall2.position.z<=-98){
         gameState.score+=1;
-        yellowBall2.position.y = yellowBall2.position.y - 100;
+        //yellowBall2.position.y = yellowBall2.position.y - 100;
+        scene.remove(yellowBall2);
         yellowBall2.__dirtyPosition = true;
         gameState.yb2=1;
       }
@@ -372,7 +378,8 @@ function updateBall(){
   if(gameState.gb==0){
       if(greenBall.position.x>=55||greenBall.position.x<=-56||greenBall.position.z>=106||greenBall.position.z<=-98){
         gameState.score+=1;
-        greenBall.position.y = greenBall.position.y - 100;
+        //greenBall.position.y = greenBall.position.y - 100;
+        scene.remove(greenBall);
         greenBall.__dirtyPosition = true;
         gameState.gb=1;
       }
@@ -380,7 +387,8 @@ function updateBall(){
   if(gameState.blub==0){
       if(blueBall.position.x>=55||blueBall.position.x<=-56||blueBall.position.z>=106||blueBall.position.z<=-98){
         gameState.score+=1;
-        blueBall.position.y = blueBall.position.y - 100;
+        //blueBall.position.y = blueBall.position.y - 100;
+        scene.remove(blueBall);
         blueBall.__dirtyPosition = true;
         gameState.blub=1;
       }
@@ -388,7 +396,8 @@ function updateBall(){
   if(gameState.dob==0){
       if(darkorangeBall.position.x>=55||darkorangeBall.position.x<=-56||darkorangeBall.position.z>=106||darkorangeBall.position.z<=-98){
         gameState.score+=1;
-        darkorangeBall.position.y = darkorangeBall.position.y - 100;
+        //darkorangeBall.position.y = darkorangeBall.position.y - 100;
+        scene.remove(darkorangeBall);
         darkorangeBall.__dirtyPosition = true;
         gameState.dob=1;
       }
@@ -396,7 +405,8 @@ function updateBall(){
   if(gameState.gb2==0){
       if(greenBall2.position.x>=55||greenBall2.position.x<=-56||greenBall2.position.z>=106||greenBall2.position.z<=-98){
         gameState.score+=1;
-        greenBall2.position.y = greenBall2.position.y - 100;
+        //greenBall2.position.y = greenBall2.position.y - 100;
+        scene.remove(greenBall2);
         greenBall2.__dirtyPosition = true;
         gameState.gb2=1;
       }
@@ -404,7 +414,8 @@ function updateBall(){
   if(gameState.dob2==0){
       if(darkorangeBall2.position.x>=55||darkorangeBall2.position.x<=-56||darkorangeBall2.position.z>=106||darkorangeBall2.position.z<=-98){
         gameState.score+=1;
-        darkorangeBall2.position.y = darkorangeBall2.position.y - 100;
+        //darkorangeBall2.position.y = darkorangeBall2.position.y - 100;
+        scene.remove(darkorangeBall2);
         darkorangeBall2.__dirtyPosition = true;
         gameState.dob2=1;
       }
@@ -412,7 +423,8 @@ function updateBall(){
   if(gameState.blub2==0){
       if(blueBall2.position.x>=55||blueBall2.position.x<=-56||blueBall2.position.z>=106||blueBall2.position.z<=-98){
         gameState.score+=1;
-        blueBall2.position.y = blueBall2.position.y - 100;
+        //blueBall2.position.y = blueBall2.position.y - 100;
+        scene.remove(blueBall2);
         blueBall2.__dirtyPosition = true;
         gameState.blub2=1;
       }
@@ -420,7 +432,8 @@ function updateBall(){
   if(gameState.ob==0){
       if(orangeBall.position.x>=55||orangeBall.position.x<=-56||orangeBall.position.z>=106||orangeBall.position.z<=-98){
         gameState.score+=1;
-        orangeBall.position.y = orangeBall.position.y - 100;
+        //orangeBall.position.y = orangeBall.position.y - 100;
+        scene.remove(orangeBall);
         orangeBall.__dirtyPosition = true;
         gameState.ob=1;
       }
@@ -428,7 +441,8 @@ function updateBall(){
   if(gameState.pb2==0){
       if(purpleBall2.position.x>=55||purpleBall2.position.x<=-56||purpleBall2.position.z>=106||purpleBall2.position.z<=-98){
         gameState.score+=1;
-        purpleBall2.position.y = purpleBall2.position.y - 100;
+        //purpleBall2.position.y = purpleBall2.position.y - 100;
+        scene.remove(purpleBall2);
         purpleBall2.__dirtyPosition = true;
         gameState.pb2=1;
       }
@@ -436,7 +450,8 @@ function updateBall(){
   if(gameState.ob2==0){
       if(orangeBall2.position.x>=55||orangeBall2.position.x<=-56||orangeBall2.position.z>=106||orangeBall2.position.z<=-98){
         gameState.score+=1;
-        orangeBall2.position.y = orangeBall2.position.y - 100;
+        //orangeBall2.position.y = orangeBall2.position.y - 100;
+        scene.remove(orangeBall2);
         orangeBall2.__dirtyPosition = true;
         gameState.ob2=1;
       }
@@ -475,7 +490,7 @@ function updateAvatar(){
     scene.add(avatar);
   }
   if (controls.restart){
-    window.location.reload(true); 
+    window.location.reload(true);
   }
 
 }
@@ -485,7 +500,7 @@ function animate(){
 
   switch(gameState.scene) {
     case "youwon":
-
+      updateAvatar();
       endText.rotateY(0.005);
       renderer.render( endScene, endCamera );
       break;
