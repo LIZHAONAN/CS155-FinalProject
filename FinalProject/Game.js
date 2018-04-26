@@ -6,7 +6,7 @@ var endScene, endCamera, endText;
 var whiteBall_control = {speed:0};
 
 var controls =
-  {fwd:false, bwd:false, left:false, right:false,
+  {fwd:false, bwd:false, left:false, right:false,reset:false,restart:false,
    speed:10}
 var gameState =
      {scene:'main', camera:'none',score:0,yb:0,rb:0,pb:0,rb2:0,bb:0,yb2:0,gb:0,blub:0,dob:0,gb2:0,dob2:0,blub2:0,ob:0,pb2:0,ob2:0}
@@ -191,68 +191,7 @@ function createTable(){
 
 
 }
-  /*
-  loader.load("../models/pool.obj",
-        function ( object ) {
-          var material = new THREE.MeshLambertMaterial( {color: 0xffff00} );
-          var pmaterial = new Physijs.createMaterial(material, 0,9, 0.5);
-          table = new Physijs.BoxMesh( object, pmaterial);
-          table = object;
-          console.dir(table);
-          var s = 50;
-          table.scale.y=s;
-          table.scale.x=s;
-          table.scale.z=s;
-          table.castShadow = true;
-          table.position.set(0,0,0);
-          scene.add(table);
-          return table;
-        },
-        function(xhr){
-          console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );},
-        function(err){console.log("error in loading: "+err);}
-      )
-  }
 
-/*	var onProgress = function ( xhr ) {
-		if ( xhr.lengthComputable ) {
-			var percentComplete = xhr.loaded / xhr.total * 100;
-			console.log( Math.round(percentComplete, 2) + '% downloaded' );
-		}
-	};
-	var onError = function ( xhr ) { };
-  var mtlLoader = new THREE.MTLLoader();
-  mtlLoader.setTexturePath( '/models/PoolTable/' );
-  mtlLoader.setPath( '/models/' );
-  var url = "PoolTable.mtl";
-  mtlLoader.load( url, function( materials ) {
-    materials.preload();
-    var objLoader = new THREE.OBJLoader();
-    objLoader.setMaterials( materials );
-    objLoader.setPath( '/models/' );
-    objLoader.load( 'PoolTable.obj', function ( object ) {
-        object.position.y = - 95;
-        scene.add( object );
-    }, onProgress, onError );
-});*/
-
-
-/*function createGround(image){
-  var geometry = new THREE.PlaneGeometry( 180, 180, 128 );
-  var texture = new THREE.TextureLoader().load( '../images/'+image );
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set( 15, 15 );
-  var material = new THREE.MeshLambertMaterial( { color: 0xffffff,  map: texture ,side:THREE.DoubleSide} );
-  var pmaterial = new Physijs.createMaterial(material,0.9,0.05);
-  var mesh = new Physijs.BoxMesh( geometry, pmaterial, 0 );
-
-  mesh.receiveShadow = true;
-
-  mesh.rotateX(Math.PI/2);
-  return mesh;
-}
-*/
 function createBall(color){
   var geometry = new THREE.SphereGeometry( 3, 20, 20);
   var material = new THREE.MeshLambertMaterial( { color: color} );
@@ -264,24 +203,7 @@ function createBall(color){
   return mesh;
 }
 
-/*
-function addBalls(){
-  var numBalls = 2;
 
-  for(i=0;i<numBalls;i++){
-    var ball = createBall(0xffffff);
-    ball.position.set(15,30+i*5,15);
-
-    //ball.position.set(randN(20)+15,30,randN(20)+15);
-    scene.add(ball);
-
-    ball.addEventListener( 'collision',
-      function( other_object, relative_velocity, relative_rotation, contact_normal ) {
-      }
-    )
-  }
-}
-*/
 
 function createAvatar(){
   var geometry = new THREE.SphereGeometry( 3, 20, 20);
@@ -363,7 +285,8 @@ function keydown(event){
               whiteBall_control.speed = (whiteBall_control.speed + 1) % 30;
               break;
 		console.dir(avatar);
-    //case "h": controls.reset = true; break;
+    case "h": controls.reset = true; break;
+    case "r": controls.restart=true;
 
     case "1": gameState.camera=camera; break;
     case "2": gameState.camera=skyCam; break;
@@ -381,7 +304,8 @@ function keyup(event){
     case "a": controls.left  = false; break;
     case "d": controls.right = false; break;
     case "m": controls.speed = 10; break;
-    //case "h": controls.reset = false; break;
+    case "h": controls.reset = false; break;
+    case "r": controls.restart=false;
     case "o":
       var dir = avatarCam.getWorldDirection();
       var x = dir.x;
@@ -543,12 +467,16 @@ function updateAvatar(){
   } else if (controls.right){
     avatar.setAngularVelocity(new THREE.Vector3(0,-controls.speed*0.1,0));
   }
-/*
+
   if (controls.reset){
     avatar.__dirtyPosition = true;
-    avatar.position.set(40,10,40);
+    scene.remove(avatar);
+    avatar.position.set(0,15.5,0);
+    scene.add(avatar);
   }
-  */
+  if (controls.restart){
+    window.location.reload(true); 
+  }
 
 }
 
@@ -584,22 +512,16 @@ function animate(){
 
 
 function createSkyBox(image,k){
-  // creating a textured plane which receives shadows
   var geometry = new THREE.SphereGeometry( 80, 80, 80 );
   var texture = new THREE.TextureLoader().load( '../images/'+image );
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set( k, k );
   var material = new THREE.MeshLambertMaterial( { color: 0xffffff,  map: texture ,side:THREE.DoubleSide} );
-  //var pmaterial = new Physijs.createMaterial(material,0.9,0.5);
-  //var mesh = new THREE.Mesh( geometry, material );
   var mesh = new THREE.Mesh( geometry, material);
 
   mesh.receiveShadow = false;
 
-
   return mesh
-  // we need to rotate the mesh 90 degrees to make it horizontal not vertical
-
 
 }
