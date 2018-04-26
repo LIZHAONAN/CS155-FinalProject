@@ -192,25 +192,6 @@ function createTable(){
 
 }
 
-function soundEffect(file){
-  // create an AudioListener and add it to the camera
-  var listener = new THREE.AudioListener();
-  camera.add( listener );
-
-  // create a global audio source
-  var sound = new THREE.Audio( listener );
-
-  // load a sound and set it as the Audio object's buffer
-  var audioLoader = new THREE.AudioLoader();
-  audioLoader.load( '/sounds/'+file, function( buffer ) {
-    sound.setBuffer( buffer );
-    sound.setLoop( false );
-    sound.setVolume( 0.5 );
-    sound.play();
-  });
-}
-
-
 function createBall(color){
   var geometry = new THREE.SphereGeometry( 3, 20, 20);
   var material = new THREE.MeshLambertMaterial( { color: color} );
@@ -343,7 +324,6 @@ function updateBall(){
   if(gameState.yb==0){
       if(yellowBall.position.x>=55||yellowBall.position.x<=-56||yellowBall.position.z>=106||yellowBall.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //yellowBall.position.y = yellowBall.position.y - 100;
         scene.remove(yellowBall);
         yellowBall.__dirtyPosition = true;
@@ -353,7 +333,6 @@ function updateBall(){
   if(gameState.rb==0){
       if(redBall.position.x>=55||redBall.position.x<=-56||redBall.position.z>=106||redBall.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //redBall.position.y = redBall.position.y - 100;
         scene.remove(redBall);
         redBall.__dirtyPosition = true;
@@ -363,7 +342,6 @@ function updateBall(){
   if(gameState.pb==0){
       if(purpleBall.position.x>=55||purpleBall.position.x<=-56||purpleBall.position.z>=106||purpleBall.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //purpleBall.position.y = purpleBall.position.y - 100;
         scene.remove(purpleBall);
         purpleBall.__dirtyPosition = true;
@@ -373,7 +351,6 @@ function updateBall(){
   if(gameState.rb2==0){
       if(redBall2.position.x>=55||redBall2.position.x<=-56||redBall2.position.z>=106||redBall2.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //redBall2.position.y = redBall2.position.y - 100;
         scene.remove(redBall2);
         redBall2.__dirtyPosition = true;
@@ -383,7 +360,6 @@ function updateBall(){
   if(gameState.bb==0){
       if(blackBall.position.x>=55||blackBall.position.x<=-56||blackBall.position.z>=106||blackBall.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //blackBall.position.y = blackBall.position.y - 100;
         scene.remove(blackBall);
         blackBall.__dirtyPosition = true;
@@ -393,7 +369,6 @@ function updateBall(){
   if(gameState.yb2==0){
       if(yellowBall2.position.x>=55||yellowBall2.position.x<=-56||yellowBall2.position.z>=106||yellowBall2.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //yellowBall2.position.y = yellowBall2.position.y - 100;
         scene.remove(yellowBall2);
         yellowBall2.__dirtyPosition = true;
@@ -403,7 +378,6 @@ function updateBall(){
   if(gameState.gb==0){
       if(greenBall.position.x>=55||greenBall.position.x<=-56||greenBall.position.z>=106||greenBall.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //greenBall.position.y = greenBall.position.y - 100;
         scene.remove(greenBall);
         greenBall.__dirtyPosition = true;
@@ -413,7 +387,6 @@ function updateBall(){
   if(gameState.blub==0){
       if(blueBall.position.x>=55||blueBall.position.x<=-56||blueBall.position.z>=106||blueBall.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //blueBall.position.y = blueBall.position.y - 100;
         scene.remove(blueBall);
         blueBall.__dirtyPosition = true;
@@ -423,7 +396,6 @@ function updateBall(){
   if(gameState.dob==0){
       if(darkorangeBall.position.x>=55||darkorangeBall.position.x<=-56||darkorangeBall.position.z>=106||darkorangeBall.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //darkorangeBall.position.y = darkorangeBall.position.y - 100;
         scene.remove(darkorangeBall);
         darkorangeBall.__dirtyPosition = true;
@@ -433,7 +405,6 @@ function updateBall(){
   if(gameState.gb2==0){
       if(greenBall2.position.x>=55||greenBall2.position.x<=-56||greenBall2.position.z>=106||greenBall2.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //greenBall2.position.y = greenBall2.position.y - 100;
         scene.remove(greenBall2);
         greenBall2.__dirtyPosition = true;
@@ -443,7 +414,6 @@ function updateBall(){
   if(gameState.dob2==0){
       if(darkorangeBall2.position.x>=55||darkorangeBall2.position.x<=-56||darkorangeBall2.position.z>=106||darkorangeBall2.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //darkorangeBall2.position.y = darkorangeBall2.position.y - 100;
         scene.remove(darkorangeBall2);
         darkorangeBall2.__dirtyPosition = true;
@@ -453,7 +423,6 @@ function updateBall(){
   if(gameState.blub2==0){
       if(blueBall2.position.x>=55||blueBall2.position.x<=-56||blueBall2.position.z>=106||blueBall2.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //blueBall2.position.y = blueBall2.position.y - 100;
         scene.remove(blueBall2);
         blueBall2.__dirtyPosition = true;
@@ -463,7 +432,6 @@ function updateBall(){
   if(gameState.ob==0){
       if(orangeBall.position.x>=55||orangeBall.position.x<=-56||orangeBall.position.z>=106||orangeBall.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //orangeBall.position.y = orangeBall.position.y - 100;
         scene.remove(orangeBall);
         orangeBall.__dirtyPosition = true;
@@ -473,7 +441,6 @@ function updateBall(){
   if(gameState.pb2==0){
       if(purpleBall2.position.x>=55||purpleBall2.position.x<=-56||purpleBall2.position.z>=106||purpleBall2.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //purpleBall2.position.y = purpleBall2.position.y - 100;
         scene.remove(purpleBall2);
         purpleBall2.__dirtyPosition = true;
@@ -483,7 +450,6 @@ function updateBall(){
   if(gameState.ob2==0){
       if(orangeBall2.position.x>=55||orangeBall2.position.x<=-56||orangeBall2.position.z>=106||orangeBall2.position.z<=-98){
         gameState.score+=1;
-        soundEffect('shoot.mp3');
         //orangeBall2.position.y = orangeBall2.position.y - 100;
         scene.remove(orangeBall2);
         orangeBall2.__dirtyPosition = true;
